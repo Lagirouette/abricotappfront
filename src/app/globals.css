@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* Couleurs relevées sur les maquettes Abricot */
+@theme {
+  --color-primary: #d3590b;          /* orange Abricot : titres, liens, logo */
+  --color-primary-light: #ffe8d9;    /* fond avatar / onglet actif */
+  --color-dark: #1f1f1f;             /* boutons principaux, nav active */
+  --color-background: #f9fafb;       /* fond des pages */
+  --color-surface: #ffffff;          /* cartes */
+  --color-line: #e5e7eb;             /* bordures */
+  --color-muted: #6b7280;            /* textes secondaires */
+
+  /* Statuts de tâche */
+  --color-status-todo: #ef4444;
+  --color-status-todo-bg: #ffe0e0;
+  --color-status-progress: #e08d00;
+  --color-status-progress-bg: #fff0d3;
+  --color-status-done: #27ae60;
+  --color-status-done-bg: #f1fff7;
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-manrope);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-dark);
+}
+
+/* Visuel des pages Connexion / Inscription.
+   Déposer l'image fournie dans public/images/auth.jpg ; le dégradé sert de repli. */
+.auth-visual {
+  background-image: url("/images/auth.jpg"),
+    linear-gradient(135deg, #1e4fa3 0%, #2d6cdf 45%, #d3590b 100%);
+}
