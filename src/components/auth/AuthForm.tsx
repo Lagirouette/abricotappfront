@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import type { AuthFormState } from "@/app/actions/auth";
+import type { AuthFormState } from "../../app/actions/auth";
 
 type Props = {
   title: string;
@@ -61,7 +61,6 @@ export default function AuthForm({
         </form>
 
         {showForgotPassword && (
-          // Aucune route backend pour la réinitialisation : lien visuel uniquement
           <span className="text-primary mt-4 cursor-not-allowed text-center text-sm underline opacity-80">
             Mot de passe oublié?
           </span>
