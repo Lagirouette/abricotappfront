@@ -21,11 +21,12 @@ export default function ProjectCard({ project, doneCount, totalCount }: Props) {
   const { owner, others } = getTeam(project);
 
   return (
-    <article className="border-line bg-surface relative flex h-full flex-col rounded-[10px] border px-8 py-7 transition hover:shadow-md">
+    <article className="border-line bg-surface focus-within:ring-primary relative flex h-full flex-col rounded-[10px] border px-8 py-7 transition focus-within:ring-2 hover:shadow-md">
       <h2 className="font-heading text-lg font-semibold">
+        {/* Au clavier, la carte entière est entourée (focus-within) */}
         <Link
           href={`/projects/${project.id}`}
-          className="after:absolute after:inset-0 after:rounded-[10px] focus-visible:outline-none"
+          className="after:absolute after:inset-0 after:rounded-[10px]"
         >
           {project.name}
         </Link>
@@ -47,7 +48,7 @@ export default function ProjectCard({ project, doneCount, totalCount }: Props) {
           aria-valuemax={100}
           className="bg-line mt-2 h-[7px] overflow-hidden rounded-full"
         >
-          <div className="bg-primary h-full rounded-full" style={{ width: `${percent}%` }} />
+          <div className="bg-brand h-full rounded-full" style={{ width: `${percent}%` }} />
         </div>
         <p className="text-muted mt-2 text-[10px]">
           {doneCount}/{totalCount} tâches terminées

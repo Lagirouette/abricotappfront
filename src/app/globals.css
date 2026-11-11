@@ -1,21 +1,29 @@
 @import "tailwindcss";
 
-/* Couleurs relevées sur les maquettes Abricot */
+/*
+ * Couleurs relevées sur les maquettes Abricot.
+ * Accessibilité (WCAG AA) : un texte doit avoir un contraste d'au moins 4.5:1 avec son fond.
+ * Les teintes de texte de la maquette n'atteignaient pas ce seuil : elles ont été
+ * légèrement assombries (même teinte). L'orange d'origine reste disponible en "brand"
+ * pour les éléments graphiques (logo, barre de progression), où 3:1 suffit.
+ */
 @theme {
-  --color-primary: #d3590b;          /* orange Abricot : titres, liens, logo */
+  --color-brand: #d3590b;            /* orange Abricot d'origine : logo, barres, décor */
+  --color-primary: #ad4a08;          /* orange des textes, liens, icônes (5.2:1 sur blanc) */
   --color-primary-light: #ffe8d9;    /* fond avatar / onglet actif */
   --color-dark: #1f1f1f;             /* boutons principaux, nav active */
+  --color-logo-dark: #0f0f0f;        /* version noire du logo (footer) */
   --color-background: #f9fafb;       /* fond des pages */
   --color-surface: #ffffff;          /* cartes */
   --color-line: #e5e7eb;             /* bordures */
-  --color-muted: #6b7280;            /* textes secondaires */
+  --color-muted: #5f6672;            /* textes secondaires (maquette : #6b7280) */
 
-  /* Statuts de tâche */
-  --color-status-todo: #ef4444;
+  /* Statuts de tâche (textes assombris, fonds de la maquette) */
+  --color-status-todo: #b83232;      /* maquette : #ef4444 */
   --color-status-todo-bg: #ffe0e0;
-  --color-status-progress: #e08d00;
+  --color-status-progress: #925c00;  /* maquette : #e08d00 */
   --color-status-progress-bg: #fff0d3;
-  --color-status-done: #27ae60;
+  --color-status-done: #1d7f46;      /* maquette : #27ae60 */
   --color-status-done-bg: #f1fff7;
 
   --font-sans: var(--font-inter);
@@ -27,9 +35,23 @@ body {
   color: var(--color-dark);
 }
 
-/* Visuel des pages Connexion / Inscription.
-   Déposer l'image fournie dans public/images/auth.jpg ; le dégradé sert de repli. */
+/*
+ * Focus visible au clavier (WCAG 2.4.7) sur tous les éléments interactifs.
+ * Règle volontairement hors des "layers" Tailwind : elle l'emporte sur les
+ * utilitaires outline-none utilisés sur les champs.
+ */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/*
+ * Visuel des pages Connexion / Inscription.
+ * Dégradé provisoire. Pour utiliser la photo de la maquette : la déposer dans
+ * public/images/auth.jpg puis ajouter url("/images/auth.jpg") en première valeur
+ * de background-image (ne pas le faire avant : un fichier absent provoque une
+ * erreur 404 dans la console).
+ */
 .auth-visual {
-  background-image: url("/images/auth.jpg"),
-    linear-gradient(135deg, #1e4fa3 0%, #2d6cdf 45%, #d3590b 100%);
+  background-image: linear-gradient(135deg, #1e4fa3 0%, #2d6cdf 45%, #d3590b 100%);
 }

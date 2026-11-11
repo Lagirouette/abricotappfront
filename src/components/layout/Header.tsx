@@ -11,7 +11,7 @@ export default function Header() {
     <header className="bg-surface">
       <div className="mx-auto flex h-[92px] max-w-[1440px] items-center justify-between px-4 md:px-10 xl:px-[100px]">
         <Link href="/dashboard" aria-label="Accueil Abricot">
-          <Logo className="text-primary w-[100px] sm:w-[147px]" />
+          <Logo className="text-brand w-[100px] sm:w-[147px]" />
         </Link>
 
         <Suspense fallback={<NavLinksView pathname={null} />}>

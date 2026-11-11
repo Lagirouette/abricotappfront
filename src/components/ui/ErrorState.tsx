@@ -21,7 +21,7 @@ export default function ErrorState({
 }: Props) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center">
-      <p aria-hidden className="font-heading text-primary text-7xl font-bold sm:text-8xl">
+      <p aria-hidden className="font-heading text-brand text-7xl font-bold sm:text-8xl">
         {code}
       </p>
       <h1 className="font-heading mt-6 text-2xl font-semibold">{title}</h1>

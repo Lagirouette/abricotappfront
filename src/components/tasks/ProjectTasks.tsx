@@ -15,11 +15,13 @@ type Props = {
   tasks: Task[];
   people: User[];
   currentUserId: string;
+  /** Administrateur du projet : peut modifier les tâches (les contributeurs non) */
+  canEdit: boolean;
 };
 
 type View = "list" | "calendar";
 
-export default function ProjectTasks({ projectId, tasks, people, currentUserId }: Props) {
+export default function ProjectTasks({ projectId, tasks, people, currentUserId, canEdit }: Props) {
   const [view, setView] = useState<View>("list");
   const [status, setStatus] = useState<TaskStatus | "ALL">("ALL");
   const [query, setQuery] = useState("");
@@ -49,7 +51,7 @@ export default function ProjectTasks({ projectId, tasks, people, currentUserId }
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div role="tablist" aria-label="Affichage des tâches" className="flex gap-2">
+          <div role="group" aria-label="Affichage des tâches" className="flex gap-2">
             <ViewTab active={view === "list"} onClick={() => setView("list")}>
               <ListIcon /> Liste
             </ViewTab>
@@ -98,13 +100,19 @@ export default function ProjectTasks({ projectId, tasks, people, currentUserId }
           <ul className="flex flex-col gap-4">
             {filtered.map((task) => (
               <li key={task.id}>
-                <ProjectTaskCard task={task} projectId={projectId} people={people} currentUserId={currentUserId} />
+                <ProjectTaskCard
+                  task={task}
+                  projectId={projectId}
+                  people={people}
+                  currentUserId={currentUserId}
+                  canEdit={canEdit}
+                />
               </li>
             ))}
           </ul>
         )
       ) : (
-        <TaskCalendar tasks={filtered} onSelect={setSelected} />
+        <TaskCalendar tasks={filtered} onSelect={canEdit ? setSelected : undefined} />
       )}
 
       {/* Clic sur une tâche du calendrier : ouverture de la modale de modification */}
@@ -128,8 +136,7 @@ function ViewTab({ active, onClick, children }: { active: boolean; onClick: () =
   return (
     <button
       type="button"
-      role="tab"
-      aria-selected={active}
+      aria-pressed={active}
       onClick={onClick}
       className={`text-primary flex h-[45px] items-center gap-2 rounded-[4px] px-4 text-sm transition ${
         active ? "bg-primary-light" : "hover:bg-primary-light/60"

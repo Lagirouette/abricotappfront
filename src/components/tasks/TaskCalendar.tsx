@@ -5,7 +5,8 @@ import type { Task, TaskStatus } from "@/src/types/api";
 
 type Props = {
   tasks: Task[];
-  onSelect: (task: Task) => void;
+  /** Clic sur une tâche (absent si l'utilisateur ne peut pas modifier les tâches) */
+  onSelect?: (task: Task) => void;
 };
 
 const WEEKDAYS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
@@ -116,14 +117,24 @@ export default function TaskCalendar({ tasks, onSelect }: Props) {
                       <ul className="flex flex-col gap-1">
                         {dayTasks.map((task) => (
                           <li key={task.id}>
-                            <button
-                              type="button"
-                              onClick={() => onSelect(task)}
-                              title={task.title}
-                              className={`w-full truncate rounded px-1.5 py-0.5 text-left ${CHIP_STYLES[task.status]}`}
-                            >
-                              {task.title}
-                            </button>
+                            {onSelect ? (
+                              <button
+                                type="button"
+                                onClick={() => onSelect(task)}
+                                title={task.title}
+                                className={`w-full truncate rounded px-1.5 py-0.5 text-left ${CHIP_STYLES[task.status]}`}
+                              >
+                                {task.title}
+                              </button>
+                            ) : (
+                              // Sans droit de modification : simple étiquette, non cliquable
+                              <span
+                                title={task.title}
+                                className={`block w-full truncate rounded px-1.5 py-0.5 ${CHIP_STYLES[task.status]}`}
+                              >
+                                {task.title}
+                              </span>
+                            )}
                           </li>
                         ))}
                       </ul>

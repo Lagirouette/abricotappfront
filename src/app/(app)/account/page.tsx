@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { displayName } from "@/src/lib/format";
 import AccountForm from "@/src/components/account/AccountForm";
 import { getCurrentUser } from "@/src/lib/user";
+import { logout } from "@/src/app/actions/auth";
 
 export const metadata: Metadata = { title: "Mon compte" };
 
@@ -16,11 +17,13 @@ export default function AccountPage() {
         </Suspense>
       </section>
 
-      <p className="mt-8 text-center">
-        <a href="/logout" className="text-primary text-sm underline">
+      {/* Déconnexion par un formulaire POST (Server Action) : un simple lien GET
+          pourrait être déclenché par un autre site (CSRF) ou par un préchargement. */}
+      <form action={logout} className="mt-8 text-center">
+        <button type="submit" className="text-primary text-sm underline">
           Se déconnecter
-        </a>
-      </p>
+        </button>
+      </form>
     </>
   );
 }

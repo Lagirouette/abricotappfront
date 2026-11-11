@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Page introuvable" };
 export default function NotFound() {
   return (
     <main className="flex min-h-screen flex-col items-center pt-20">
-      <Logo className="text-primary w-[200px]" />
+      <Logo className="text-brand w-[200px]" />
       <ErrorState
         code="404"
         title="Page introuvable"

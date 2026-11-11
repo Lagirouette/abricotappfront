@@ -7,7 +7,7 @@ export default function GlobalError({ error, retry }: { error: unknown; retry: (
   return (
     <html lang="fr">
       <body className="flex min-h-screen flex-col items-center justify-center px-4 text-center font-sans">
-        <p aria-hidden className="text-primary text-7xl font-bold">
+        <p aria-hidden className="text-brand text-7xl font-bold">
           Oups
         </p>
         <h1 className="mt-6 text-2xl font-semibold">L&apos;application a rencontré un problème</h1>

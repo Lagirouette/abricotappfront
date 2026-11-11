@@ -1,6 +1,7 @@
 "use server";
 
 import { ApiError, apiFetch } from "@/src/lib/api";
+import { getProject } from "@/src/lib/projects";
 import { Task, TaskStatus } from "@/src/types/api";
 import { refresh } from "next/cache";
 
@@ -86,6 +87,13 @@ export async function updateTask(
   if (Object.keys(fieldErrors ?? {}).length > 0) return { fieldErrors };
 
   try {
+    // Spécification : seuls les administrateurs du projet modifient une tâche.
+    // Le backend l'autorise à tous les membres : on vérifie donc le rôle ici,
+    // côté serveur (le bouton masqué dans l'interface ne suffit pas).
+    const project = await getProject(projectId);
+    if (project.userRole !== "ADMIN") {
+      return { error: "Seuls les administrateurs du projet peuvent modifier une tâche." };
+    }
     await apiFetch(`/projects/${projectId}/tasks/${taskId}`, { method: "PUT", body: data });
   } catch (error) {
     return toFormState(error);

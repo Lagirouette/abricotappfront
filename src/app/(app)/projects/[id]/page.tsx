@@ -101,6 +101,7 @@ async function ProjectContent({ params }: { params: Promise<{ id: string }> }) {
         tasks={sortByUrgency(tasks)}
         people={people}
         currentUserId={me.id}
+        canEdit={isAdmin}
       />
     </>
   );

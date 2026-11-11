@@ -17,9 +17,14 @@ type Props = {
   projectId: string;
   people: User[];
   currentUserId: string;
+  /**
+   * Spécification : seuls les administrateurs modifient une tâche.
+   * Les contributeurs peuvent seulement créer et supprimer des tâches.
+   */
+  canEdit: boolean;
 };
 
-export default function ProjectTaskCard({ task, projectId, people, currentUserId }: Props) {
+export default function ProjectTaskCard({ task, projectId, people, currentUserId, canEdit }: Props) {
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleteError, setDeleteError] = useState<string>();
@@ -40,7 +45,7 @@ export default function ProjectTaskCard({ task, projectId, people, currentUserId
         </div>
         <TaskMenu
           taskTitle={task.title}
-          onEdit={() => setEditing(true)}
+          onEdit={canEdit ? () => setEditing(true) : undefined}
           onDelete={() => setConfirmDelete(true)}
         />
       </div>
@@ -93,16 +98,18 @@ export default function ProjectTaskCard({ task, projectId, people, currentUserId
         </div>
       </div>
 
-      <Modal open={editing} onClose={closeEdit} title="Modifier">
-        <TaskForm
-          action={updateTask.bind(null, projectId, task.id)}
-          people={people}
-          task={task}
-          submitLabel="Enregistrer"
-          pendingLabel="Enregistrement…"
-          onSuccess={closeEdit}
-        />
-      </Modal>
+      {canEdit && (
+        <Modal open={editing} onClose={closeEdit} title="Modifier">
+          <TaskForm
+            action={updateTask.bind(null, projectId, task.id)}
+            people={people}
+            task={task}
+            submitLabel="Enregistrer"
+            pendingLabel="Enregistrement…"
+            onSuccess={closeEdit}
+          />
+        </Modal>
+      )}
 
       <ConfirmModal
         open={confirmDelete}
@@ -127,7 +134,19 @@ export default function ProjectTaskCard({ task, projectId, people, currentUserId
   );
 }
 
-function TaskMenu({ taskTitle, onEdit, onDelete }: { taskTitle: string; onEdit: () => void; onDelete: () => void }) {
+/**
+ * Bouton "…" qui déplie une liste d'actions (simple bouton à déroulement, navigable avec Tab).
+ * `onEdit` absent : l'action "Modifier" n'est pas proposée.
+ */
+function TaskMenu({
+  taskTitle,
+  onEdit,
+  onDelete,
+}: {
+  taskTitle: string;
+  onEdit?: () => void;
+  onDelete: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -152,7 +171,6 @@ function TaskMenu({ taskTitle, onEdit, onDelete }: { taskTitle: string; onEdit: 
     <div ref={ref} className="relative shrink-0">
       <button
         type="button"
-        aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
         aria-label={`Actions pour la tâche ${taskTitle}`}
@@ -164,26 +182,25 @@ function TaskMenu({ taskTitle, onEdit, onDelete }: { taskTitle: string; onEdit: 
       {open && (
         <ul
           id={menuId}
-          role="menu"
           className="border-line bg-surface absolute right-0 z-10 mt-1 w-40 rounded-[10px] border py-1 shadow-lg"
         >
-          <li role="none">
+          {onEdit && (
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  onEdit();
+                }}
+                className="hover:bg-background w-full px-4 py-2 text-left text-sm"
+              >
+                Modifier
+              </button>
+            </li>
+          )}
+          <li>
             <button
               type="button"
-              role="menuitem"
-              onClick={() => {
-                setOpen(false);
-                onEdit();
-              }}
-              className="hover:bg-background w-full px-4 py-2 text-left text-sm"
-            >
-              Modifier
-            </button>
-          </li>
-          <li role="none">
-            <button
-              type="button"
-              role="menuitem"
               onClick={() => {
                 setOpen(false);
                 onDelete();

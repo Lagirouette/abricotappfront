@@ -20,7 +20,7 @@ export default function DashboardViews({ tasks, projects }: Props) {
 
   return (
     <>
-      <div role="tablist" aria-label="Affichage des tâches" className="mt-14 mb-10 flex gap-2">
+      <div role="group" aria-label="Affichage des tâches" className="mt-14 mb-10 flex gap-2">
         <ViewTab active={view === "list"} onClick={() => setView("list")}>
           <ListIcon /> Liste
         </ViewTab>
@@ -51,8 +51,7 @@ function ViewTab({
   return (
     <button
       type="button"
-      role="tab"
-      aria-selected={active}
+      aria-pressed={active}
       onClick={onClick}
       className={`text-primary flex h-[45px] items-center gap-2 rounded-[4px] px-4 text-sm transition ${
         active ? "bg-primary-light" : "bg-surface hover:bg-primary-light/60"

@@ -1,4 +1,4 @@
-export default function Logo({ className = "w-[147px] text-primary" }: { className?: string }) {
+export default function Logo({ className = "w-[147px] text-brand" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 253 33"

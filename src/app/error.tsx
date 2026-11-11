@@ -8,7 +8,7 @@ import ErrorView from "../components/ui/ErrorView";
 export default function RootError({ error, retry }: { error: unknown; retry: () => void }) {
   return (
     <main className="flex min-h-screen flex-col items-center pt-20">
-      <Logo className="text-primary w-[200px]" />
+      <Logo className="text-brand w-[200px]" />
       <ErrorView error={error} retry={retry} />
     </main>
   );
