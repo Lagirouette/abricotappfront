@@ -1,5 +1,5 @@
-import type { TaskStatus } from "../../types/api";
-import { STATUS_LABELS } from "../../lib/format";
+import { STATUS_LABELS } from "@/src/lib/format";
+import type { TaskStatus } from "@/src/types/api";
 
 const STYLES: Record<TaskStatus, string> = {
   TODO: "bg-status-todo-bg text-status-todo",

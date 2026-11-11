@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { Task } from "../../types/api";
-import { formatShortDate } from "../../lib/format";
-import { CalendarIcon, CommentIcon, FolderIcon } from "../../components/icons";
+import { CalendarIcon, CommentIcon, FolderIcon } from "../icons";
+import { formatShortDate } from "@/src/lib/format";
+import type { Task } from "@/src/types/api";
 import StatusBadge from "./StatusBadge";
 
 type Props = {
