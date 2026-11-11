@@ -47,6 +47,33 @@ export function CommentIcon({ className = "size-4" }: IconProps) {
   );
 }
 
+export function TeamIcon({ className = "size-3.5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={`${base} ${className}`}>
+      <circle cx="9" cy="8" r="4" />
+      <path d="M1 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5v1H1v-1Z" />
+      <circle cx="17.5" cy="8.5" r="3" opacity=".6" />
+      <path d="M18 13.6c3 .4 5 2.5 5 5.4v2h-4.5v-1c0-2.6-1-4.8-2.6-6.3.7-.1 1.4-.1 2.1-.1Z" opacity=".6" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className = "size-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden className={`${base} ${className}`}>
+      <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ChevronDownIcon({ className = "size-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden className={`${base} ${className}`}>
+      <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function SearchIcon({ className = "size-4" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden className={`${base} ${className}`}>

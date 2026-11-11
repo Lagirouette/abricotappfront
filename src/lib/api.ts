@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import type { ApiResponse, ValidationError } from "../types/api";
 import { getToken } from "./session";
 
-// URL du backend. Les appels partent du serveur Next, donc pas de souci de CORS.
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 
 export class ApiError extends Error {
@@ -19,16 +18,9 @@ export class ApiError extends Error {
 type FetchOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: unknown;
-  /** false pour les routes publiques (login, register) */
   auth?: boolean;
 };
 
-/**
- * Appelle le backend et renvoie `data` de la réponse.
- * - Ajoute le header Authorization à partir du cookie de session.
- * - Lève une ApiError si la réponse n'est pas un succès.
- * - Redirige vers /login si le token est invalide ou expiré (401).
- */
 export async function apiFetch<T>(
   path: string,
   { method = "GET", body, auth = true }: FetchOptions = {}
@@ -59,7 +51,7 @@ export async function apiFetch<T>(
   const json = (await res.json().catch(() => null)) as ApiResponse<T> | null;
 
   if (res.status === 401 && auth) {
-    // Token expiré ou invalide : on passe par la route de déconnexion
+    // Token expiré ou invalide
     redirect("/logout");
   }
 
