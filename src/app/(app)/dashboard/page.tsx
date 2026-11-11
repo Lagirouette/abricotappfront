@@ -3,9 +3,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { apiFetch } from "../../../lib/api";
 import { getCurrentUser } from "../../../lib/user";
-import { displayName, sortByUrgency } from "../../../lib/format";
-import type { Task } from "../../../types/api";
+import { displayName, sortByUrgency, sortProjectsByUrgency } from "../../../lib/format";
+import type { Project, Task } from "../../../types/api";
 import DashboardViews from "../../../components/dashboard/DashboardViews";
+import CreateProjectButton from "@/src/components/projects/CreateProjectButton";
 
 export const metadata: Metadata = { title: "Tableau de bord" };
 
@@ -19,13 +20,7 @@ export default function DashboardPage() {
             <Greeting />
           </Suspense>
         </div>
-        {/* La modale de création de projet sera branchée à l'étape "Projets" */}
-        <Link
-          href="/projects"
-          className="bg-dark flex h-[50px] items-center rounded-[10px] px-6 text-sm text-white transition hover:opacity-90"
-        >
-          + Créer un projet
-        </Link>
+        <CreateProjectButton />
       </div>
 
       <Suspense fallback={<p className="text-muted mt-14">Chargement des tâches…</p>}>
@@ -45,6 +40,15 @@ async function Greeting() {
 }
 
 async function AssignedTasks() {
-  const { tasks } = await apiFetch<{ tasks: Task[] }>("/dashboard/assigned-tasks");
-  return <DashboardViews tasks={sortByUrgency(tasks)} />;
+  const [{ tasks }, { projects }] = await Promise.all([
+    apiFetch<{ tasks: Task[] }>("/dashboard/assigned-tasks"),
+    apiFetch<{ projects: Project[] }>("/dashboard/projects-with-tasks"),
+  ]);
+  return (
+    <DashboardViews
+      tasks={sortByUrgency(tasks)}
+      projects={sortProjectsByUrgency(projects)}
+    />
+  );
 }
+

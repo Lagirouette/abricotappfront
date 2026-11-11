@@ -42,6 +42,7 @@ export interface Project {
   members: ProjectMember[];
   userRole?: Role | null;
   _count?: { tasks: number };
+  tasks?: Task[];
 }
 
 export interface TaskAssignee {

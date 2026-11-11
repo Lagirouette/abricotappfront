@@ -1,14 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Task, TaskStatus } from "../../types/api";
-import { STATUS_LABELS } from "../../lib/format";
-import { CalendarIcon, ListIcon, SearchIcon } from "../../components/icons";
+import type { Project, Task, TaskStatus } from "../../types/api";
+import { formatShortDate, isOverdue, isPending, nextDueDate, STATUS_LABELS } from "../../lib/format";
+import { CalendarIcon, FolderIcon, ListIcon, SearchIcon } from "../../components/icons";
 import TaskCard from "../../components/tasks/TaskCard";
+import StatusBadge from "../tasks/StatusBadge";
+import Link from "next/link";
 
-type View = "list" | "kanban";
+type View = "list" | "kanban" | "projects";
 
-export default function DashboardViews({ tasks }: { tasks: Task[] }) {
+type Props = {
+  tasks: Task[];
+  projects: Project[];
+};
+
+export default function DashboardViews({ tasks, projects }: Props) {
   const [view, setView] = useState<View>("list");
 
   return (
@@ -20,9 +27,14 @@ export default function DashboardViews({ tasks }: { tasks: Task[] }) {
         <ViewTab active={view === "kanban"} onClick={() => setView("kanban")}>
           <CalendarIcon /> Kanban
         </ViewTab>
+        <ViewTab active={view === "projects"} onClick={() => setView("projects")}>
+          <FolderIcon className="size-4" /> Projets
+        </ViewTab>
       </div>
 
-      {view === "list" ? <ListView tasks={tasks} /> : <KanbanView tasks={tasks} />}
+      {view === "list" && <ListView tasks={tasks} />}
+      {view === "kanban" && <KanbanView tasks={tasks} />}
+      {view === "projects" && <ProjectsView projects={projects} />}
     </>
   );
 }
@@ -193,5 +205,108 @@ function FilterPill({
     >
       {children}
     </button>
+  );
+}
+
+function ProjectsView({ projects }: { projects: Project[] }) {
+  return (
+    <section
+      aria-labelledby="projects-title"
+      className="border-line bg-surface rounded-[10px] border px-4 py-10 sm:px-14"
+    >
+      <div className="mb-10">
+        <h2 id="projects-title" className="font-heading text-lg font-semibold">
+          Mes projets en cours
+        </h2>
+        <p className="text-muted text-base">Projets où des tâches vous sont assignées, les plus urgents d&apos;abord</p>
+      </div>
+
+      {projects.length === 0 ? (
+        <p className="text-muted py-10 text-center">Aucune tâche ne vous est assignée pour le moment.</p>
+      ) : (
+        <ul className="flex flex-col gap-4">
+          {projects.map((project) => (
+            <li key={project.id}>
+              <DashboardProjectCard project={project} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/** Tâches à traiter d'abord, puis par échéance la plus proche (sans échéance à la fin) */
+function sortForProjectCard(tasks: Task[]): Task[] {
+  return [...tasks].sort((a, b) => {
+    if (isPending(a) !== isPending(b)) return isPending(a) ? -1 : 1;
+    if (!a.dueDate) return 1;
+    if (!b.dueDate) return -1;
+    return a.dueDate.localeCompare(b.dueDate);
+  });
+}
+
+function DashboardProjectCard({ project }: { project: Project }) {
+  const tasks = project.tasks ?? [];
+  const pending = tasks.filter(isPending);
+  const overdue = tasks.filter(isOverdue);
+  const next = nextDueDate(tasks);
+  const titleId = `dashboard-project-${project.id}`;
+
+  return (
+    <article aria-labelledby={titleId} className="border-line rounded-[10px] border px-5 py-6 sm:px-10">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h3 id={titleId} className="font-heading text-lg font-semibold">
+            {project.name}
+          </h3>
+          {project.description && (
+            <p className="text-muted mt-1 line-clamp-2 text-sm">{project.description}</p>
+          )}
+          <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+            <span>
+              {pending.length} tâche{pending.length > 1 ? "s" : ""} à traiter sur {tasks.length}
+            </span>
+            {next && (
+              <span className="border-line flex items-center gap-1 border-l pl-3">
+                <CalendarIcon className="size-3.5" />
+                Prochaine échéance : <time dateTime={next}>{formatShortDate(next)}</time>
+              </span>
+            )}
+            {overdue.length > 0 && (
+              <span className="bg-status-todo-bg text-status-todo rounded-full px-3 py-0.5">
+                {overdue.length} en retard
+              </span>
+            )}
+          </p>
+        </div>
+        <Link
+          href={`/projects/${project.id}`}
+          className="bg-dark inline-flex h-[50px] shrink-0 items-center justify-center rounded-[10px] px-6 text-sm text-white transition hover:opacity-90"
+        >
+          Voir le projet<span className="sr-only"> {project.name}</span>
+        </Link>
+      </div>
+
+      {/* Mes tâches dans ce projet, les plus proches de l'échéance d'abord */}
+      <ul className="border-line mt-5 flex flex-col gap-2 border-t pt-5">
+        {sortForProjectCard(tasks).map((task) => (
+            <li key={task.id} className="flex flex-wrap items-center justify-between gap-2 text-sm">
+              <span className="min-w-0 truncate">{task.title}</span>
+              <span className="flex items-center gap-3">
+                {task.dueDate && (
+                  <time
+                    dateTime={task.dueDate}
+                    className={`text-xs ${isOverdue(task) ? "text-status-todo" : "text-muted"}`}
+                  >
+                    {formatShortDate(task.dueDate)}
+                  </time>
+                )}
+                <StatusBadge status={task.status} />
+              </span>
+            </li>
+          ))}
+      </ul>
+    </article>
   );
 }

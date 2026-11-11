@@ -1,6 +1,5 @@
-import type { Task, TaskPriority, TaskStatus, User } from "../types/api";
+import type { Project, Task, TaskPriority, TaskStatus, User } from "../types/api";
 
-/** "Alice Martin" -> "AM" ; sans nom, on prend les 2 premières lettres de l'email */
 export function getInitials(user: Pick<User, "name" | "email">): string {
   const source = user.name?.trim();
   if (!source) return user.email.slice(0, 2).toUpperCase();
@@ -10,11 +9,15 @@ export function getInitials(user: Pick<User, "name" | "email">): string {
   return letters.toUpperCase();
 }
 
+export function splitName(name: string | null): { firstName: string; lastName: string } {
+  const [firstName = "", ...rest] = (name ?? "").trim().split(/\s+/);
+  return { firstName, lastName: rest.join(" ") };
+}
+
 export function displayName(user: Pick<User, "name" | "email">): string {
   return user.name?.trim() || user.email;
 }
 
-/** "2024-03-09T00:00:00Z" -> "9 mars" (l'année est ajoutée si ce n'est pas l'année en cours) */
 export function formatShortDate(iso: string): string {
   const date = new Date(iso);
   const sameYear = date.getFullYear() === new Date().getFullYear();
@@ -52,5 +55,45 @@ export function sortByUrgency(tasks: Task[]): Task[] {
     const aDue = a.dueDate ? Date.parse(a.dueDate) : Infinity;
     const bDue = b.dueDate ? Date.parse(b.dueDate) : Infinity;
     return aDue - bDue;
+  });
+}
+
+/** Tâche encore à traiter (ni terminée ni annulée) */
+export function isPending(task: Task): boolean {
+  return task.status === "TODO" || task.status === "IN_PROGRESS";
+}
+
+/** Échéance dépassée pour une tâche non terminée (comparaison au jour près, en UTC) */
+export function isOverdue(task: Task): boolean {
+  if (!task.dueDate || !isPending(task)) return false;
+  const today = new Date().toISOString().slice(0, 10);
+  return task.dueDate.slice(0, 10) < today;
+}
+
+/** Échéance la plus proche parmi les tâches à traiter d'un projet (null s'il n'y en a pas) */
+export function nextDueDate(tasks: Task[]): string | null {
+  const dates = tasks
+    .filter((t) => isPending(t) && t.dueDate)
+    .map((t) => t.dueDate!)
+    .sort();
+  return dates[0] ?? null;
+}
+
+/**
+ * Projets les plus urgents d'abord : prochaine échéance des tâches à traiter,
+ * puis nombre de tâches à traiter. Les projets sans tâche en attente passent à la fin.
+ */
+export function sortProjectsByUrgency(projects: Project[]): Project[] {
+  return [...projects].sort((a, b) => {
+    const aDue = nextDueDate(a.tasks ?? []);
+    const bDue = nextDueDate(b.tasks ?? []);
+    if (aDue !== bDue) {
+      if (!aDue) return 1;
+      if (!bDue) return -1;
+      return aDue < bDue ? -1 : 1;
+    }
+    const aPending = (a.tasks ?? []).filter(isPending).length;
+    const bPending = (b.tasks ?? []).filter(isPending).length;
+    return bPending - aPending;
   });
 }

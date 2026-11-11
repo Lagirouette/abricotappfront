@@ -19,11 +19,12 @@ type FetchOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: unknown;
   auth?: boolean;
+  logoutOnUnauthorized?: boolean;
 };
 
 export async function apiFetch<T>(
   path: string,
-  { method = "GET", body, auth = true }: FetchOptions = {}
+  { method = "GET", body, auth = true, logoutOnUnauthorized = true }: FetchOptions = {}
 ): Promise<T> {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
 
@@ -50,7 +51,7 @@ export async function apiFetch<T>(
 
   const json = (await res.json().catch(() => null)) as ApiResponse<T> | null;
 
-  if (res.status === 401 && auth) {
+  if (res.status === 401 && auth && logoutOnUnauthorized) {
     // Token expiré ou invalide
     redirect("/logout");
   }

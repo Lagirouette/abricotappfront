@@ -4,6 +4,7 @@ import NavLinks, { NavLinksView } from "./NavLinks";
 import { getCurrentUser } from "../../lib/user";
 import { displayName, getInitials } from "../../lib/format";
 import Logo from "../Logo";
+import AccountLink from "./AccountLink";
 
 export default function Header() {
   return (
@@ -27,11 +28,7 @@ export default function Header() {
 
 async function UserAvatar() {
   const user = await getCurrentUser();
-  return (
-    <Link href="/account" aria-label={`Mon compte (${displayName(user)})`}>
-      <AvatarCircle initials={getInitials(user)} />
-    </Link>
-  );
+  return <AccountLink initials={getInitials(user)} name={displayName(user)} />;
 }
 
 function AvatarCircle({ initials }: { initials: string }) {
