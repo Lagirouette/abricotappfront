@@ -82,3 +82,36 @@ export function SearchIcon({ className = "size-4" }: IconProps) {
     </svg>
   );
 }
+
+/** Étoile à 4 branches de la maquette (bouton et modales IA) */
+export function SparkleIcon({ className = "size-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={`${base} ${className}`}>
+      <path d="M12 2c.6 4.9 2.9 7.4 8 8-5.1.6-7.4 3.1-8 8-.6-4.9-2.9-7.4-8-8 5.1-.6 7.4-3.1 8-8Z" />
+    </svg>
+  );
+}
+
+export function TrashIcon({ className = "size-3.5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={`${base} ${className}`}>
+      <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-3 6h12l-1 12H7L6 9Z" />
+    </svg>
+  );
+}
+
+export function PencilIcon({ className = "size-3.5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={`${base} ${className}`}>
+      <path d="m15.5 4.5 4 4L9 19H5v-4L15.5 4.5Zm2-1.5 1.4-1.4a1.4 1.4 0 0 1 2 0l2 2a1.4 1.4 0 0 1 0 2L21.5 7 17.5 3Z" />
+    </svg>
+  );
+}
+
+export function ArrowUpIcon({ className = "size-3.5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden className={`${base} ${className}`}>
+      <path d="M12 19V5m-6 6 6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}

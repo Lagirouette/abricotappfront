@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { ApiError } from "@/src/lib/api";
 import type { Project } from "@/src/types/api";
 import CreateTaskButton from "@/src/components/tasks/CreateTaskButton";
+import AiTaskButton from "@/src/components/tasks/AiTaskButton";
 import EditProjectButton from "@/src/components/projects/EditProjectButton";
 import { getProject, getProjectPeople, getProjectTasks } from "@/src/lib/projects";
 import { getCurrentUser } from "@/src/lib/user";
@@ -50,7 +51,7 @@ async function ProjectContent({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
       <div className="flex flex-wrap items-start justify-between gap-6">
-        <div className="flex items-start gap-4">
+        <div className="flex min-w-0 flex-1 basis-[420px] items-start gap-4">
           <Link
             href="/projects"
             aria-label="Retour à la liste des projets"
@@ -66,7 +67,10 @@ async function ProjectContent({ params }: { params: Promise<{ id: string }> }) {
             {project.description && <p className="mt-2 text-lg">{project.description}</p>}
           </div>
         </div>
-        <CreateTaskButton projectId={project.id} people={people} />
+        <div className="flex shrink-0 gap-3">
+          <CreateTaskButton projectId={project.id} people={people} />
+          <AiTaskButton />
+        </div>
       </div>
 
       <section
