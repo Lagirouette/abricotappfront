@@ -18,7 +18,6 @@ const CHIP_STYLES: Record<TaskStatus, string> = {
   CANCELLED: "bg-line text-muted",
 };
 
-/** Clé "YYYY-MM-DD" en UTC (les échéances du backend sont à minuit UTC) */
 function dayKey(date: Date) {
   return date.toISOString().slice(0, 10);
 }

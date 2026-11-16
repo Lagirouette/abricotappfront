@@ -5,6 +5,8 @@ import { SESSION_COOKIE } from "./constants";
 // et toute réponse 401 du backend déconnecte l'utilisateur.
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 
+// httpOnly : le JavaScript du navigateur ne peut pas lire le token (protection contre le vol par XSS).
+// sameSite "lax" limite l'envoi du cookie depuis d'autres sites ; secure = HTTPS en production.
 export async function createSession(token: string) {
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE, token, {

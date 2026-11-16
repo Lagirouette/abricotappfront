@@ -81,7 +81,7 @@ export default function ContributorPicker({ name, defaultSelected = [], error }:
           type="text"
           role="combobox"
           aria-expanded={listVisible}
-          aria-controls={listId}
+          aria-controls={listVisible ? listId : undefined}
           aria-autocomplete="list"
           // Indique au lecteur d'écran l'option mise en avant, sans déplacer le focus
           aria-activedescendant={listVisible && active >= 0 ? optionId(active) : undefined}

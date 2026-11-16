@@ -11,7 +11,7 @@ export default function Avatar({ user, tone = "default", className = "" }: Props
   return (
     <span
       title={displayName(user)}
-      className={`border-surface inline-flex size-[27px] shrink-0 items-center justify-center rounded-full border-2 text-[10px] ${
+      className={`border-surface inline-flex size-[27px] shrink-0 items-center justify-center rounded-full border-2 text-[11px] ${
         tone === "owner" ? "bg-primary-light" : "bg-line"
       } ${className}`}
     >

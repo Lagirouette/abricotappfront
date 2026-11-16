@@ -16,9 +16,7 @@ export default function AccountPage() {
           <AccountContent />
         </Suspense>
       </section>
-
-      {/* Déconnexion par un formulaire POST (Server Action) : un simple lien GET
-          pourrait être déclenché par un autre site (CSRF) ou par un préchargement. */}
+      
       <form action={logout} className="mt-8 text-center">
         <button type="submit" className="text-primary text-sm underline">
           Se déconnecter

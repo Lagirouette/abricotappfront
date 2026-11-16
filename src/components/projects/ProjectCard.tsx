@@ -50,13 +50,13 @@ export default function ProjectCard({ project, doneCount, totalCount }: Props) {
         >
           <div className="bg-brand h-full rounded-full" style={{ width: `${percent}%` }} />
         </div>
-        <p className="text-muted mt-2 text-[10px]">
+        <p className="text-muted mt-2 text-xs">
           {doneCount}/{totalCount} tâches terminées
         </p>
       </div>
 
       <div className="mt-auto">
-        <p className="text-muted flex items-center gap-2 text-[10px]">
+        <p className="text-muted flex items-center gap-2 text-xs">
           <TeamIcon /> Équipe ({others.length + 1})
         </p>
         <div className="mt-3 flex items-center">
@@ -69,7 +69,7 @@ export default function ProjectCard({ project, doneCount, totalCount }: Props) {
               <Avatar key={u.id} user={u} />
             ))}
             {others.length > 4 && (
-              <span className="bg-line border-surface inline-flex size-[27px] items-center justify-center rounded-full border-2 text-[10px]">
+              <span className="bg-line border-surface inline-flex size-[27px] items-center justify-center rounded-full border-2 text-[11px]">
                 +{others.length - 4}
               </span>
             )}

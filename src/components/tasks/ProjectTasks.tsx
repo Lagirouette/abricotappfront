@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useId, useMemo, useState } from "react";
 import { updateTask } from "@/src/app/actions/tasks";
 import { CalendarIcon, ListIcon, SearchIcon } from "../icons";
 import Modal from "../ui/Modal";
@@ -27,6 +27,8 @@ export default function ProjectTasks({ projectId, tasks, people, currentUserId, 
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Task | null>(null);
   const closeSelected = useCallback(() => setSelected(null), []);
+  const titleId = useId();
+  const statusId = useId();
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -39,12 +41,12 @@ export default function ProjectTasks({ projectId, tasks, people, currentUserId, 
 
   return (
     <section
-      aria-labelledby="tasks-title"
+      aria-labelledby={titleId}
       className="border-line bg-surface mt-8 rounded-[10px] border px-4 py-10 sm:px-14"
     >
       <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 id="tasks-title" className="font-heading text-lg font-semibold">
+          <h2 id={titleId} className="font-heading text-lg font-semibold">
             Tâches
           </h2>
           <p className="text-muted">Par ordre de priorité</p>
@@ -60,11 +62,11 @@ export default function ProjectTasks({ projectId, tasks, people, currentUserId, 
             </ViewTab>
           </div>
 
-          <label className="sr-only" htmlFor="status-filter">
+          <label className="sr-only" htmlFor={statusId}>
             Filtrer par statut
           </label>
           <select
-            id="status-filter"
+            id={statusId}
             value={status}
             onChange={(e) => setStatus(e.target.value as TaskStatus | "ALL")}
             className="border-line focus:border-primary h-[53px] rounded-[8px] border bg-white px-4 text-sm outline-none"

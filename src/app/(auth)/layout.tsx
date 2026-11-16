@@ -1,4 +1,5 @@
 import Logo from "@/src/components/Logo";
+import AuthVisual from "@/src/components/auth/AuthVisual";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,7 +8,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <Logo className="text-brand w-[253px]" />
         {children}
       </section>
-      <div aria-hidden className="auth-visual hidden flex-1 bg-cover bg-center lg:block" />
+      <AuthVisual />
     </main>
   );
 }

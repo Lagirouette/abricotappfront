@@ -12,6 +12,9 @@ export type AccountFormState = {
   fieldErrors?: Partial<Record<Field, string>>;
 };
 
+// Le backend ne stocke qu'un champ "name" : on envoie "Prénom Nom". Le mot de passe n'est
+// modifié que si un nouveau est saisi. logoutOnUnauthorized: false, car ici un 401 veut dire
+// "mot de passe actuel incorrect" et non "session expirée".
 export async function updateAccount(
   _prev: AccountFormState,
   formData: FormData

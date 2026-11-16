@@ -1,5 +1,7 @@
 import type { Project, Task, TaskPriority, TaskStatus, User } from "../types/api";
 
+// "Alice Martin" -> "AM" (première et dernière partie du nom).
+// Sans nom renseigné, on prend les 2 premières lettres de l'email.
 export function getInitials(user: Pick<User, "name" | "email">): string {
   const source = user.name?.trim();
   if (!source) return user.email.slice(0, 2).toUpperCase();
@@ -9,6 +11,8 @@ export function getInitials(user: Pick<User, "name" | "email">): string {
   return letters.toUpperCase();
 }
 
+// "Alice Martin" -> { firstName: "Alice", lastName: "Martin" }.
+// Le backend ne stocke qu'un champ "name" : on le découpe pour le formulaire Mon compte.
 export function splitName(name: string | null): { firstName: string; lastName: string } {
   const [firstName = "", ...rest] = (name ?? "").trim().split(/\s+/);
   return { firstName, lastName: rest.join(" ") };
@@ -18,6 +22,8 @@ export function displayName(user: Pick<User, "name" | "email">): string {
   return user.name?.trim() || user.email;
 }
 
+// Date courte en français ("9 mars"), avec l'année seulement si ce n'est pas l'année en cours.
+// timeZone UTC : les échéances sont enregistrées à minuit UTC, sinon elles s'afficheraient la veille.
 export function formatShortDate(iso: string): string {
   const date = new Date(iso);
   const sameYear = date.getFullYear() === new Date().getFullYear();

@@ -172,7 +172,7 @@ function TaskMenu({
       <button
         type="button"
         aria-expanded={open}
-        aria-controls={menuId}
+        aria-controls={open ? menuId : undefined}
         aria-label={`Actions pour la tâche ${taskTitle}`}
         onClick={() => setOpen((o) => !o)}
         className="border-line hover:bg-background flex size-[57px] items-center justify-center rounded-[10px] border text-lg leading-none"

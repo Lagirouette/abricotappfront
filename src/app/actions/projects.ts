@@ -11,6 +11,8 @@ export type ProjectFormState = {
   fieldErrors?: Partial<Record<"name" | "description" | "contributors", string>>;
 };
 
+// Le créateur devient automatiquement administrateur (géré par le backend).
+// Les contributeurs arrivent par des champs cachés "contributors" (un par email choisi).
 export async function createProject(
   _prev: ProjectFormState,
   formData: FormData
@@ -45,6 +47,9 @@ export async function createProject(
   return { success: true };
 }
 
+// Le backend n'a pas de route pour remplacer tous les contributeurs d'un coup : on compare
+// la liste voulue aux membres actuels, puis on ajoute (POST) et retire (DELETE) un par un.
+// Le propriétaire est exclu de la comparaison : il ne peut pas être retiré.
 export async function updateProject(
   projectId: string,
   _prev: ProjectFormState,

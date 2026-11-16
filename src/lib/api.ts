@@ -4,6 +4,8 @@ import { getToken } from "./session";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 
+// Erreur renvoyée par le backend : garde le code HTTP (0 = serveur injoignable)
+// et la liste des erreurs de validation par champ.
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -22,6 +24,9 @@ type FetchOptions = {
   logoutOnUnauthorized?: boolean;
 };
 
+// Appelle le backend depuis le serveur Next et renvoie le champ "data" de la réponse.
+// Ajoute le token du cookie, lève une ApiError en cas d'échec et, sur un 401,
+// déconnecte l'utilisateur (sauf avec logoutOnUnauthorized: false).
 export async function apiFetch<T>(
   path: string,
   { method = "GET", body, auth = true, logoutOnUnauthorized = true }: FetchOptions = {}

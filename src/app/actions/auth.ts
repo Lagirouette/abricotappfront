@@ -18,6 +18,8 @@ function readCredentials(formData: FormData) {
   };
 }
 
+// Transforme une erreur de l'API en état du formulaire : les erreurs de validation
+// du backend (champ "email" ou "password") s'affichent sous le bon champ.
 function toFormState(error: unknown, email: string): AuthFormState {
   if (error instanceof ApiError) {
     const fieldErrors: AuthFormState["fieldErrors"] = {};
@@ -31,6 +33,9 @@ function toFormState(error: unknown, email: string): AuthFormState {
   return { error: "Une erreur inattendue est survenue", email };
 }
 
+// Connexion : le JWT renvoyé par le backend est stocké dans un cookie httpOnly.
+// redirect() est appelé après le try/catch : il fonctionne en lançant une erreur
+// spéciale que le catch intercepterait sinon.
 export async function login(
   _prev: AuthFormState,
   formData: FormData
@@ -52,10 +57,10 @@ export async function login(
     return toFormState(error, email);
   }
 
-  // redirect() doit être appelé hors du try/catch
   redirect("/dashboard");
 }
 
+// Même fonctionnement que login : l'utilisateur est connecté dès son inscription.
 export async function register(
   _prev: AuthFormState,
   formData: FormData

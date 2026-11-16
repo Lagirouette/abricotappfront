@@ -10,11 +10,6 @@ type Props = {
   children: React.ReactNode;
 };
 
-/**
- * Modale basée sur l'élément natif <dialog> + showModal() :
- * focus piégé dans la modale, fermeture avec Échap et fond assombri gérés par le navigateur.
- * Le contenu n'est monté que lorsque la modale est ouverte (formulaire remis à zéro à chaque ouverture).
- */
 export default function Modal({ open, onClose, title, children }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -29,7 +24,7 @@ export default function Modal({ open, onClose, title, children }: Props) {
   return (
     <dialog
       ref={ref}
-      aria-labelledby={titleId}
+      aria-labelledby={open ? titleId : undefined}
       onClose={onClose}
       onClick={(e) => {
         if (e.target === ref.current) onClose();

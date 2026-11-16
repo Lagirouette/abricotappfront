@@ -13,6 +13,7 @@ export type TaskFormState = {
 
 const STATUSES: TaskStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
+// Lit les champs du formulaire de tâche. Un statut inattendu est ramené à "TODO".
 function readTaskForm(formData: FormData) {
   const status = String(formData.get("status") ?? "TODO") as TaskStatus;
   return {
@@ -32,6 +33,8 @@ function validate(data: ReturnType<typeof readTaskForm>): TaskFormState["fieldEr
   return errors;
 }
 
+// Seules les ApiError deviennent des messages. Les autres erreurs (ex. la redirection
+// vers /logout quand le token a expiré) sont relancées pour que Next.js les gère.
 function toFormState(error: unknown): TaskFormState {
   if (!(error instanceof ApiError)) throw error; // ex. redirection /logout
   const fieldErrors: TaskFormState["fieldErrors"] = {};
@@ -43,6 +46,8 @@ function toFormState(error: unknown): TaskFormState {
   return { error: error.message, fieldErrors };
 }
 
+// Le backend n'accepte pas de statut à la création (la tâche est toujours "TODO") :
+// si un autre statut est choisi, on le met à jour avec un PUT juste après.
 export async function createTask(
   projectId: string,
   _prev: TaskFormState,

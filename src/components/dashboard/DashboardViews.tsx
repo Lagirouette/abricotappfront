@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import type { Project, Task, TaskStatus } from "../../types/api";
 import { formatShortDate, isOverdue, isPending, nextDueDate, STATUS_LABELS } from "../../lib/format";
 import { CalendarIcon, FolderIcon, ListIcon, SearchIcon } from "../../components/icons";
@@ -64,6 +64,7 @@ function ViewTab({
 
 function ListView({ tasks }: { tasks: Task[] }) {
   const [query, setQuery] = useState("");
+  const titleId = useId();
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -77,12 +78,12 @@ function ListView({ tasks }: { tasks: Task[] }) {
 
   return (
     <section
-      aria-labelledby="assigned-title"
+      aria-labelledby={titleId}
       className="border-line bg-surface rounded-[10px] border px-4 py-10 sm:px-14"
     >
       <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 id="assigned-title" className="font-heading text-lg font-semibold">
+          <h2 id={titleId} className="font-heading text-lg font-semibold">
             Mes tâches assignées
           </h2>
           <p className="text-muted text-base">Par ordre de priorité</p>
@@ -208,13 +209,14 @@ function FilterPill({
 }
 
 function ProjectsView({ projects }: { projects: Project[] }) {
+  const titleId = useId();
   return (
     <section
-      aria-labelledby="projects-title"
+      aria-labelledby={titleId}
       className="border-line bg-surface rounded-[10px] border px-4 py-10 sm:px-14"
     >
       <div className="mb-10">
-        <h2 id="projects-title" className="font-heading text-lg font-semibold">
+        <h2 id={titleId} className="font-heading text-lg font-semibold">
           Mes projets en cours
         </h2>
         <p className="text-muted text-base">Projets où des tâches vous sont assignées, les plus urgents d&apos;abord</p>

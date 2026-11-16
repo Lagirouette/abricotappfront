@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 type Props = {
   id: string;
   name: string;
@@ -25,14 +27,17 @@ export default function TextField({
   hint,
   required = true,
 }: Props) {
-  const describedBy = [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ");
+  const inputId = `${id}-${useId()}`;
+  const describedBy = [hint && `${inputId}-hint`, error && `${inputId}-error`]
+    .filter(Boolean)
+    .join(" ");
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm">
+      <label htmlFor={inputId} className="text-sm">
         {label}
       </label>
       <input
-        id={id}
+        id={inputId}
         name={name}
         type={type}
         required={required}
@@ -45,12 +50,12 @@ export default function TextField({
         className="border-line focus:border-primary aria-[invalid=true]:border-status-todo placeholder:text-muted h-[53px] rounded-[4px] border bg-white px-4 text-sm outline-none"
       />
       {hint && (
-        <p id={`${id}-hint`} className="text-muted text-xs">
+        <p id={`${inputId}-hint`} className="text-muted text-xs">
           {hint}
         </p>
       )}
       {error && (
-        <p id={`${id}-error`} className="text-status-todo text-xs">
+        <p id={`${inputId}-error`} className="text-status-todo text-xs">
           {error}
         </p>
       )}

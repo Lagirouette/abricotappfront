@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useId, useState } from "react";
 import type { AuthFormState } from "../../app/actions/auth";
 
 type Props = {
@@ -20,6 +20,7 @@ export default function AuthForm({
   footer,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
+  const [showForgotInfo, setShowForgotInfo] = useState(false);
 
   return (
     <div className="flex w-full max-w-[283px] flex-1 flex-col">
@@ -61,9 +62,18 @@ export default function AuthForm({
         </form>
 
         {showForgotPassword && (
-          <span className="text-primary mt-4 cursor-not-allowed text-center text-sm underline opacity-80">
-            Mot de passe oublié?
-          </span>
+          <>
+            <button
+              type="button"
+              onClick={() => setShowForgotInfo(true)}
+              className="text-primary mx-auto mt-4 text-sm underline"
+            >
+              Mot de passe oublié?
+            </button>
+            <p aria-live="polite" className="text-muted mt-2 text-center text-xs">
+              {showForgotInfo && "La réinitialisation du mot de passe n'est pas dispo."}
+            </p>
+          </>
         )}
       </div>
 
@@ -87,22 +97,23 @@ function Field({
   label: string;
   error?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
+  const inputId = `${id}-${useId()}`;
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm">
+      <label htmlFor={inputId} className="text-sm">
         {label}
       </label>
       <input
-        id={id}
+        id={inputId}
         name={id}
         required
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={error ? `${inputId}-error` : undefined}
         className="border-line focus:border-primary h-[53px] rounded-[4px] border bg-white px-4 text-sm outline-none aria-[invalid=true]:border-status-todo"
         {...input}
       />
       {error && (
-        <p id={`${id}-error`} className="text-status-todo text-xs">
+        <p id={`${inputId}-error`} className="text-status-todo text-xs">
           {error}
         </p>
       )}
