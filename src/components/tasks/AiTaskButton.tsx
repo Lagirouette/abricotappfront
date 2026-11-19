@@ -4,15 +4,6 @@ import { useCallback, useId, useState } from "react";
 import Modal from "../ui/Modal";
 import { ArrowUpIcon, PencilIcon, SparkleIcon, TrashIcon } from "../icons";
 
-/*
- * Création de tâches par IA : INTERFACE UNIQUEMENT (maquettes "Modale création de tâche IA"
- * et "Modale liste de tâche IA").
- * Le backend ne propose aucun endpoint pour générer des tâches : rien n'est envoyé.
- * - Étape "prompt" : l'utilisateur décrit les tâches voulues.
- * - Étape "results" : affiche des tâches d'exemple, comme sur la maquette.
- * Les boutons Supprimer / Modifier / Ajouter les tâches ne font rien pour l'instant.
- */
-
 type Step = "prompt" | "results";
 
 // Tâches d'exemple affichées à la place d'une vraie réponse de l'IA (contenu de la maquette)
