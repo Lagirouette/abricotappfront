@@ -69,7 +69,7 @@ async function ProjectContent({ params }: { params: Promise<{ id: string }> }) {
         </div>
         <div className="flex shrink-0 gap-3">
           <CreateTaskButton projectId={project.id} people={people} />
-          <AiTaskButton />
+          <AiTaskButton projectId={project.id} />
         </div>
       </div>
 
